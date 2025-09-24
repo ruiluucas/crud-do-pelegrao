@@ -1,12 +1,22 @@
+<?php
+session_start();
+if ((!isset($_SESSION['email']))) {
+  unset($_SESSION['email']);
+  header('location:login.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sistema de Gestão de Produtos</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body>
-    <h1 class="text-5xl">Sistema de Gestão de Produtos</h1>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Gestão de Produtos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+  <h1 class="text-5xl">Sistema de Gestão de Produtos</h1>
+</body>
+
 </html>

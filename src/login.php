@@ -1,3 +1,25 @@
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  require('./app/services/pessoaService.php');
+
+  session_start();
+
+  $email = $_POST['email'];
+  $senha = $_POST['senha'];
+
+  $pessoaService = new PessoaService();
+
+  $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
+
+  $_SESSION['email'] = $email;
+
+  $pessoaService->getById($email, $senhaHash);
+
+  header('Location: index.php');
+
+  exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -14,7 +36,7 @@
     <div class="flex justify-center mb-6">
       <button class="px-4 py-2 font-semibold text-blue-500">Login</button>
     </div>
-    <form class="space-y-4" action="../app/login.php" method="post">
+    <form class="space-y-4" method="post">
       <input
         type="email"
         placeholder="Email"
