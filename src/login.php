@@ -1,4 +1,6 @@
 <?php
+$loginResult = true;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   require('./app/services/pessoaService.php');
 
@@ -8,16 +10,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $senha = $_POST['senha'];
 
   $pessoaService = new PessoaService();
-
-  $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
-
-  $_SESSION['email'] = $email;
-
-  $pessoaService->getById($email, $senhaHash);
-
-  header('Location: index.php');
-
-  exit;
+  $loginResult = $pessoaService->login($email, $senha);
+  if ($loginResult) {
+    $_SESSION['email'] = $email;
+    header('Location: index.php');
+  }
 }
 ?>
 <!DOCTYPE html>
@@ -36,14 +33,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="flex justify-center mb-6">
       <button class="px-4 py-2 font-semibold text-blue-500">Login</button>
     </div>
+    <p class="w-full text-center text-red-500"><? if ($loginResult === false) echo 'Senha incorreta' ?>
+      <? if ($loginResult === null) echo 'Email não cadastrado' ?></p>
     <form class="space-y-4" method="post">
       <input
         type="email"
         placeholder="Email"
+        name="email"
         class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
       <input
         type="password"
         placeholder="Senha"
+        name="senha"
         class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
       <button
         type="submit"

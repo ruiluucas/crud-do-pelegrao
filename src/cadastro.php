@@ -32,6 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body
   class="bg-neutral-900 flex h-screen w-screen justify-center items-center">
   <div class="w-full mx-auto max-w-md bg-white rounded-lg shadow-md p-8">
+    <div class="mb-4">
+      <a href="/" class="text-blue-500 hover:underline">&larr; Voltar para a página inicial</a>
+    </div>
     <div class="flex justify-center mb-6">
       <button class="px-4 py-2 font-semibold text-blue-500">Cadastro</button>
     </div>

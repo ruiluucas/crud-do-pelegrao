@@ -78,8 +78,8 @@ class Database
         try {
             $cnx = $this->getInstance();
             $result = $cnx->query($sql);
-
-            return $result;
+            $data = $result->fetchAll(PDO::FETCH_ASSOC);
+            return $data;
         } catch (PDOException $e) {
             echo $sql . "<br>" . $e->getMessage();
         }
