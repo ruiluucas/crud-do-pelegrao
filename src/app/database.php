@@ -67,8 +67,11 @@ class Database
         try {
             $cnx = $this->getInstance();
             $cnx->exec($sql);
+
+            $lastId = $cnx->lastInsertId(); // pega o ID gerado automaticamente
+            return $lastId;
         } catch (PDOException $e) {
-            return "Falha ao Inserir dados" . "<br>";
+            return $e;
         }
     }
 

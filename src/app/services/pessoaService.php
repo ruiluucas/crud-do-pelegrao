@@ -24,7 +24,11 @@ class PessoaService
   {
     $result = $this->database->select("SELECT * FROM pessoas WHERE email='$email'");
     if (is_array($result) && count($result) > 0) {
-      return password_verify($senha, $result[0]['senha']);
+      $passwordVerify =  password_verify($senha, $result[0]['senha']);
+      if ($passwordVerify) {
+        return $result[0]['id'];
+      }
+      return 0;
     }
     return null;
   }

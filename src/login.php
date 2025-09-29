@@ -11,8 +11,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   $pessoaService = new PessoaService();
   $loginResult = $pessoaService->login($email, $senha);
+
   if ($loginResult) {
     $_SESSION['email'] = $email;
+    $_SESSION['id'] = $loginResult;
     header('Location: index.php');
   }
 }

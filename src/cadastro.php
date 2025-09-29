@@ -13,9 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   $_SESSION['email'] = $email;
 
-  $pessoaService->create($email, $senhaHash);
-  header('Location: index.php');
+  $id = $pessoaService->create($email, $senhaHash);
+  $_SESSION['id'] = $id;
 
+  header('Location: index.php');
   exit;
 }
 ?>

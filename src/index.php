@@ -3,11 +3,14 @@ include('./app/services/produtoService.php');
 include('./app/services/fornecedorService.php');
 
 session_start();
-$email = $_SESSION['email'];
-if ((!isset($_SESSION['email']))) {
+
+if (!isset($_SESSION['email'])) {
   unset($_SESSION['email']);
-  header('location:login.php');
+  header('Location: login.php');
+  exit;
 }
+
+$email = $_SESSION['email'] ?? null;
 
 $fornecedorService = new FornecedorService();
 $produtoService = new ProdutoService();
@@ -23,58 +26,128 @@ $produtos = $produtoService->getAll();
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
-  <div class="bg-white shadow-lg rounded-lg p-10 w-full max-w-xl">
-    <?php if (!empty($email)): ?>
-      <p class="text-black text-right text-gray-600 mb-4"><span class="font-semibold"><?php echo htmlspecialchars($email); ?></span></p>
-    <?php endif; ?>
-    <h1 class="text-4xl font-bold text-center text-blue-700 mb-8">Sistema de Gestão de Produtos</h1>
-    <div class="flex justify-between mb-6">
-      <a href="adicionar/produto.php" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition">
-        Adicionar Produto
-      </a>
-      <a href="adicionar/fornecedor.php" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition">
-        Adicionar Fornecedor
-      </a>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center">
+  <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-4xl mt-10 mb-10">
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-2xl font-bold text-blue-700">Sistema de Gestão de Produtos</h1>
+      <a href="cesta.php" class="text-sm text-gray-600 hover:underline">Ver Cesta</a>
     </div>
-    <div class="flex flex-col gap-4">
+
+    <div class="flex justify-between mb-6">
+      <div>
+        <a href="adicionar/produto.php" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition mr-2">
+          Adicionar Produto
+        </a>
+        <a href="adicionar/fornecedor.php" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition">
+          Adicionar Fornecedor
+        </a>
+      </div>
+
+      <p class="text-right text-gray-600 mb-4">
+        <span class="font-semibold"><?php echo htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?></span>
+      </p>
+    </div>
+
+    <div class="overflow-x-auto">
       <table class="min-w-full border border-gray-300">
         <thead class="bg-gray-100">
           <tr>
-            <th></th>
+            <th class="px-4 py-2 border-b"></th>
             <th class="px-4 py-2 border-b text-left">Nome</th>
             <th class="px-4 py-2 border-b text-left">Fornecedor</th>
           </tr>
         </thead>
         <tbody>
-          <?php foreach ($produtos as $key): ?>
-            <tr class="hover:bg-gray-50">
-              <td class="px-4 py-2 border-b"><input onchange="saveRow(<? echo $key['id'] ?>)" type="checkbox" name="" id=""></td>
-              <td class="px-4 py-2 border-b"><? echo $key['nome_produto'] ?></td>
-              <td class="px-4 py-2 border-b"><? echo $key['nome_fornecedor'] ?></td>
+          <?php if (!empty($produtos) && is_array($produtos)): ?>
+            <?php foreach ($produtos as $produto): ?>
+              <tr class="hover:bg-gray-50">
+                <td class="px-4 py-2 border-b text-center">
+                  <input
+                    id="prod_<?php echo $produto['id']; ?>"
+                    onchange='saveRow(JSON.parse(JSON.stringify(<?php echo json_encode($produto['id']); ?>)))'
+                    type="checkbox" />
+                </td>
+                <td class="px-4 py-2 border-b"><?php echo $produto['nome_produto']; ?></td>
+                <td class="px-4 py-2 border-b"><?php echo $produto['nome_fornecedor']; ?></td>
+              </tr>
+            <?php endforeach; ?>
+          <?php else: ?>
+            <tr>
+              <td colspan="3" class="px-4 py-4 text-center text-gray-500">Nenhum produto cadastrado.</td>
             </tr>
-          <?php endforeach; ?>
+          <?php endif; ?>
         </tbody>
       </table>
-      <button onclick="" type="button">Adicionar na cesta</button>
+    </div>
+
+    <div class="mt-6 flex items-center justify-between">
+      <div>
+        <button
+          id="addToCestaBtn"
+          onclick="handleCesta()"
+          disabled
+          class="bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition"
+          type="button">
+          Adicionar na cesta
+        </button>
+      </div>
     </div>
   </div>
-</body>
-<script>
-  var values = []
 
-  function saveRow(id) {
-    if (values.includes(id)) {
-      values.pop(id)
-    } else {
-      values.push(id)
+  <script>
+    const selected = new Set();
+
+    function updateSummary() {
+      const btn = document.getElementById('addToCestaBtn');
+      btn.disabled = (selected.size === 0);
     }
-    console.log(values)
-  }
 
-  function handleCesta() {
+    function saveRow(id) {
 
-  }
-</script>
+      if (selected.has(id)) {
+        selected.delete(id);
+      } else {
+        selected.add(id);
+      }
+      updateSummary();
+    }
+
+    async function handleCesta() {
+      const ids = Array.from(selected)
+
+      const resp = await fetch('cesta.php', {
+        method: 'POST',
+        body: JSON.stringify({
+          ids
+        })
+      });
+
+      const data = await resp.text();
+
+      console.log(data)
+
+      if (data && data.success) {
+        selected.clear();
+        ids.forEach(id => {
+          const el = document.getElementById('prod_' + id);
+          if (el && el.checked) el.checked = false;
+        });
+        updateSummary();
+
+      }
+    }
+
+    (function init() {
+      const inputs = document.querySelectorAll('input[id^="prod_"]');
+      inputs.forEach(input => {
+        const idMatch = input.id.replace('prod_', '');
+        if (input.checked) {
+          selected.add(Number(idMatch));
+        }
+      });
+      updateSummary();
+    })();
+  </script>
+</body>
 
 </html>
