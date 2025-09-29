@@ -28,9 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
+    <div class="flex flex-row justify-between p-3">
+        <a href="index.php" class="text-sm text-gray-600 hover:underline">- Voltar</a>
+        <h1>Quantidade: <?php echo count($produtos) ?></h1>
+    </div>
     <div class="overflow-x-auto">
         <table class="min-w-full border border-gray-300">
             <thead class="bg-gray-100">
@@ -61,6 +66,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endif; ?>
             </tbody>
         </table>
+        <?php
+        $precoTotal = 0;
+        foreach ($produtos as $produto) {
+            $precoTotal += floatval($produto['preco_produto']);
+        }
+        ?>
+        <h1 class="p-2 text-center">Preço total: R$<?php echo number_format($precoTotal, 2, ',', '.'); ?></h1>
     </div>
 </body>
 

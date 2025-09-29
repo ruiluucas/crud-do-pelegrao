@@ -9,9 +9,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $fornecedorId = $_POST['fornecedor'];
     $nome = $_POST['nome'];
+    $preco = $_POST['preco'];
 
     $produtoService = new ProdutoService();
-    $produtoService->create($nome, $fornecedorId);
+    $produtoService->create($nome, $fornecedorId, $preco);
 }
 ?>
 <!DOCTYPE html>
@@ -33,6 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div>
                 <label for="nome" class="block text-gray-700 font-medium">Nome do Produto:</label>
                 <input type="text" id="nome" name="nome" required
+                    class="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label for="preco" class="block text-gray-700 font-medium">Preço:</label>
+                <input type="number" step="any" id="preco" name="preco" required
                     class="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
             <div>

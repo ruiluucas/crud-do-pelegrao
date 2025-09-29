@@ -10,6 +10,7 @@ class ProdutoService extends Database
                 id INT(6) AUTO_INCREMENT PRIMARY KEY,
                 nome VARCHAR(50) NOT NULL UNIQUE,
                 fornecedor_id INT(6),
+                preco float,
                 FOREIGN KEY (fornecedor_id) REFERENCES fornecedores(id) 
             )");
         } catch (Exception $e) {
@@ -17,9 +18,9 @@ class ProdutoService extends Database
         }
     }
 
-    public function create($nome = null, $fornecedorId = null)
+    public function create($nome, $fornecedorId, $preco)
     {
-        $id = $this->insert("INSERT INTO produtos (nome, fornecedor_id) VALUES ('{$nome}', '{$fornecedorId}')");
+        $id = $this->insert("INSERT INTO produtos (nome, preco, fornecedor_id) VALUES ('$nome', $preco, $fornecedorId)");
         return $id;
     }
 

@@ -70,8 +70,12 @@ $produtos = $produtoService->getAll();
                     onchange='saveRow(JSON.parse(JSON.stringify(<?php echo json_encode($produto['id']); ?>)))'
                     type="checkbox" />
                 </td>
-                <td class="px-4 py-2 border-b"><?php echo $produto['nome_produto']; ?></td>
-                <td class="px-4 py-2 border-b"><?php echo $produto['nome_fornecedor']; ?></td>
+                <td class="px-4 py-2 border-b">
+                  <p onclick=""><?php echo $produto['nome_produto']; ?></p>
+                </td>
+                <td class="px-4 py-2 border-b">
+                  <p onclick=""><?php echo $produto['nome_fornecedor']; ?></p>
+                </td>
               </tr>
             <?php endforeach; ?>
           <?php else: ?>

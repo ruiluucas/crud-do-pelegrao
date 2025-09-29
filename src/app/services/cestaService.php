@@ -28,7 +28,7 @@ class CestaService extends Database
     {
         session_start();
         $userId = $_SESSION['id'];
-        $produtos = $this->select("SELECT produtos.id, produtos.nome AS nome_produto, fornecedores.nome AS nome_fornecedor 
+        $produtos = $this->select("SELECT produtos.id, produtos.nome AS nome_produto, fornecedores.nome AS nome_fornecedor, produtos.preco as preco_produto
             FROM cestas 
             INNER JOIN produtos ON cestas.produto_id = produtos.id 
             INNER JOIN fornecedores ON produtos.fornecedor_id = fornecedores.id
