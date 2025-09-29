@@ -33,7 +33,7 @@ $produtos = $produtoService->getAll();
       <a href="cesta.php" class="text-sm text-gray-600 hover:underline">Ver Cesta</a>
     </div>
 
-    <div class="flex justify-between mb-6">
+    <div class="flex justify-between mb-6 items-center">
       <div>
         <a href="adicionar/produto.php" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition mr-2">
           Adicionar Produto
@@ -46,6 +46,9 @@ $produtos = $produtoService->getAll();
       <p class="text-right text-gray-600 mb-4">
         <span class="font-semibold"><?php echo htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?></span>
       </p>
+      <form action="logout.php" method="post">
+        <button type='submit' class="bg-red-500 text-white rounded-md p-2">Logout</button>
+      </form>
     </div>
 
     <div class="overflow-x-auto">

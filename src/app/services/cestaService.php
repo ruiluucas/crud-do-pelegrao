@@ -24,11 +24,16 @@ class CestaService extends Database
         return $id;
     }
 
-    public function getProdutosByUserId($userId)
+    public function getProdutosByUserId()
     {
-        return $this->select("SELECT produtos.* FROM cestas 
+        session_start();
+        $userId = $_SESSION['id'];
+        $produtos = $this->select("SELECT produtos.id, produtos.nome AS nome_produto, fornecedores.nome AS nome_fornecedor 
+            FROM cestas 
             INNER JOIN produtos ON cestas.produto_id = produtos.id 
-            WHERE cestas.pessoa_id = '{$userId}'");
+            INNER JOIN fornecedores ON produtos.fornecedor_id = fornecedores.id
+            WHERE cestas.pessoa_id = {$userId}");
+        return $produtos;
     }
 
     public function getAll()
