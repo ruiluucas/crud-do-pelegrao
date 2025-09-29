@@ -20,7 +20,7 @@ crud-do-pelegrao/
 │   │   └── produto.php        # Adição e gerenciamento de produtos
 │   └── app/
 │       ├── database.php       # Configuração e conexão com o banco de dados
-│       └── services/          
+│       └── services/
 │           ├── cestaService.php     # Lógica de negócios para cestas
 │           ├── fornecedorService.php# Lógica de negócios para fornecedores
 │           ├── pessoaService.php    # Lógica de negócios para pessoas
@@ -38,7 +38,7 @@ Este sistema foi desenvolvido para facilitar a gestão de produtos, fornecedores
 
 ## Descrição de Arquivos Principais
 
-- **`cadastro.php`**: Interface para criação de novos usuários e validação dos dados enviados. 
+- **`cadastro.php`**: Interface para criação de novos usuários e validação dos dados enviados.
 - **`cesta.php`**: Permite visualizar e modificar a cesta de compras do usuário, integrando com os serviços para gerenciamento dos itens.
 - **`index.php`**: Página inicial que direciona o fluxo do sistema e apresenta o dashboard com as principais informações.
 - **`login.php` e `logout.php`**: Gerenciam autenticação de usuários, permitindo logins e encerramento de sessões com segurança.
