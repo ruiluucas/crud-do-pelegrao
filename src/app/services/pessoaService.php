@@ -11,13 +11,26 @@ class PessoaService
       $this->database = new Database();
 
       $this->database->createTable("CREATE TABLE IF NOT EXISTS pessoas (
-          id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+          id INT(6) AUTO_INCREMENT PRIMARY KEY,
           email VARCHAR(50) NOT NULL UNIQUE,
           senha VARCHAR(255) NOT NULL
         )");
     } catch (Exception $e) {
       throw new Exception("Erro ao conectar ao banco de dados: " . $e->getMessage());
     }
+  }
+
+  public function login($email = null, $senha = null)
+  {
+    $result = $this->database->select("SELECT * FROM pessoas WHERE email='$email'");
+    if (is_array($result) && count($result) > 0) {
+      $passwordVerify =  password_verify($senha, $result[0]['senha']);
+      if ($passwordVerify) {
+        return $result[0]['id'];
+      }
+      return 0;
+    }
+    return null;
   }
 
   public function create($email = null, $senha = null)

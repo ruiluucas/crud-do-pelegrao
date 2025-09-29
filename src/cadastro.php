@@ -1,7 +1,9 @@
 <?php
-require('./app/services/pessoaService.php');
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  require('./app/services/pessoaService.php');
+
+  session_start();
+
   $email = $_POST['email'];
   $senha = $_POST['senha'];
 
@@ -9,17 +11,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
-  $_SESSION['user'] = [
-    'email' => $email,
-  ];
+  $_SESSION['email'] = $email;
 
-  try {
-    $pessoaService->create($email, $senhaHash);
-    header('Location: index.php');
-  } catch (Exception $e) {
-    die("Erro ao cadastrar: " . $e->getMessage());
-  }
+  $id = $pessoaService->create($email, $senhaHash);
+  $_SESSION['id'] = $id;
 
+  header('Location: index.php');
   exit;
 }
 ?>
@@ -36,10 +33,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body
   class="bg-neutral-900 flex h-screen w-screen justify-center items-center">
   <div class="w-full mx-auto max-w-md bg-white rounded-lg shadow-md p-8">
+    <div class="mb-4">
+      <a href="/" class="text-blue-500 hover:underline">&larr; Voltar para a página inicial</a>
+    </div>
     <div class="flex justify-center mb-6">
       <button class="px-4 py-2 font-semibold text-blue-500">Cadastro</button>
     </div>
-    <form class="space-y-4" method="post" action="cadastro.php">
+    <form class="space-y-4" method="post">
       <input
         type="email"
         placeholder="Email"
