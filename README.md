@@ -1,5 +1,6 @@
 <img src='./image.png' />
 # CRUD do Pelegrao
+https://www.figma.com/design/OLYP1eflTqYyuFPHA6B5cJ/crud-do-pelegrao?m=auto&t=fJv4R6RqKnAaK4sp-6
 
 Projeto CRUD desenvolvido em PHP. Este projeto implementa funcionalidades de cadastro, login, logout e gerenciamento de cestas de compras, incluindo a adição de fornecedores e produtos.
 
